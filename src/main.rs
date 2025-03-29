@@ -8,7 +8,10 @@ fn get_user_choice(question: [&str; 5]) -> u8 {
     let opt4 = question[4];
     loop {
         let mut input = String::new();
-        println!("{}\n1. {}\n2. {}\n3. {}\n4. {}", q, &opt1, &opt2, &opt3, &opt4);
+        println!(
+            "{}\n1. {}\n2. {}\n3. {}\n4. {}",
+            q, &opt1, &opt2, &opt3, &opt4
+        );
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
@@ -27,62 +30,90 @@ fn main() {
     let mut pathfinder: u8 = 0;
     let mut ironsworn: u8 = 0;
     let mut cyberpunk: u8 = 0;
-    let choices: [[&str; 5]; 8] = [
-    [
+    let choices: [[&str; 5]; 12] = [ // Expanded slightly to 12 for better nuance
+    [ // Q1: World Preference (Existing - Slightly tweaked D)
         "What kind of world do you find most interesting for an adventure?",
-        "A dark, futuristic city with cool technology and tough choices.", // Bladerunner (Simplified)
-        "A magical land with heroes, monsters, and grand quests.", // Pathfinder (Simplified)
-        "A wild and lonely place where you have to rely on yourself and your promises.", // Ironsworn (Simplified)
-        "A dangerous, exciting city in the near future with cybernetic enhancements and powerful corporations.", // CP:RED (Simplified)
+        "A dark, rain-slicked futuristic city wrestling with artificial life and moral decay.", // BR - More specific noir tech
+        "A vast fantasy realm brimming with magic, diverse peoples, ancient ruins, and legendary monsters.", // PF - Emphasizes scope
+        "A harsh, unforgiving landscape (wilds, space, etc.) where survival and personal promises are key.", // IS - Broadens beyond just landscape
+        "A gritty, high-tech metropolis dominated by corporations, cybernetics, and street-level survival.", // CPR - Clearer focus
     ],
-    [
-        "Which of these types of stories sounds most exciting to you?",
-        "Solving mysteries and making difficult decisions with big consequences.", // Bladerunner (Simplified)
-        "Being a hero, fighting evil, and discovering amazing things.", // Pathfinder (Simplified)
-        "Exploring a harsh world, making your own way, and keeping your word.", // Ironsworn (Simplified)
-        "Going on action-packed missions, looking cool, and standing up to the bad guys.", // CP:RED (Simplified)
+    [ // Q2: Core Theme (Existing - Good as is)
+        "Which of these general themes appeals to you the most in a story?",
+        "Investigating complex mysteries and making difficult choices with ambiguous outcomes.", // BR
+        "Embarking on epic quests, battling powerful foes, and achieving heroic feats.", // PF
+        "Forging your own path in a dangerous world, driven by personal commitments (vows).", // IS - Highlighting vows
+        "Undertaking high-stakes missions, making a name for yourself, and fighting against the system.", // CPR
     ],
-    [
-        "When you play a game, what kind of things do you enjoy doing the most?",
-        "Figuring out clues and talking to people to solve problems.", // Bladerunner (Simplified)
-        "Battling monsters and using special abilities.", // Pathfinder (Simplified)
-        "Exploring new places and trying to survive in a challenging environment.", // Ironsworn (Simplified)
-        "Having exciting fights and making a name for yourself.", // CP:RED (Simplified)
+    [ // Q3: Preferred Activities (Existing - Slightly tweaked C & D)
+        "When playing, what kind of activities sound most engaging?",
+        "Gathering clues, interviewing characters, and piecing together complex situations.", // BR
+        "Exploring dungeons, fighting monsters tactically, and discovering powerful artifacts.", // PF
+        "Journeying through challenging environments, overcoming obstacles using wits, and fulfilling personal goals.", // IS
+        "Executing daring jobs, engaging in fast-paced combat, and navigating social webs.", // CPR
     ],
-    [
-        "How do you feel about rules in games?",
-        "I prefer games where the story is the main focus, and the rules are simple.", // Bladerunner & Ironsworn (Combined for simplicity)
-        "I like having lots of options for my character and clear rules for what I can do.", // Pathfinder & CP:RED (Combined for broader appeal)
-        "I trust you to guide us, and I'm happy to learn as we go.", // General option for a new player
-        "As long as the rules make sense, I'm okay with them.", // Another general option
+    [ // Q4: Rules Feel (Revised Q4 - Focus on impact, not just complexity)
+        "How do you prefer game rules to feel during play?",
+        "Subtle and atmospheric, supporting the mood and story without demanding constant attention.", // BR (Year Zero)
+        "Comprehensive and tactical, offering lots of options for strategy and character abilities.", // PF
+        "Narrative-focused, directly triggering story moments and consequences based on dice rolls.", // IS (PbtA-style)
+        "Action-oriented and intuitive, enabling dynamic scenes and impactful choices without excessive crunch.", // CPR (Interlock)
     ],
-    [
-        "What kind of character would you enjoy playing as?",
-        "Someone clever and good at solving problems.", // Bladerunner (Simplified)
-        "A brave hero with special skills or powers.", // Pathfinder (Simplified)
-        "Someone tough and resourceful who can handle anything.", // Ironsworn (Simplified)
-        "Someone cool and skilled who can get things done.", // CP:RED (Simplified)
+    [ // Q5: Character Appeal (Existing - Tweaked C)
+        "What kind of character sounds most compelling to play?",
+        "An introspective individual skilled at observation, deduction, and navigating moral grey areas.", // BR
+        "A capable hero defined by their class, skills, and role within an adventuring party (even a small one).", // PF
+        "A resilient survivor, defined more by their actions, experiences, and sworn oaths than by a class.", // IS
+        "A stylish and skilled operator (merc, netrunner, etc.) carving out a niche in a dangerous world.", // CPR
     ],
-    [
-        "What kind of feeling do you want our game sessions to have?",
-        "Intriguing and like we're uncovering a secret.", // Bladerunner (Simplified)
-        "Exciting and like we're on a big adventure.", // Pathfinder (Simplified)
-        "Atmospheric and like we're facing challenges in a serious world.", // Ironsworn (Simplified)
-        "Action-packed and like we're in the middle of a thrilling story.", // CP:RED (Simplified)
+    [ // Q6: Desired Atmosphere (Existing - Good as is)
+        "What kind of overall atmosphere or feeling would you like our game sessions to have?",
+        "Intriguing and suspenseful, with a sense of mystery and philosophical questions.", // BR
+        "Exciting and adventurous, with a feeling of heroism and discovery in a magical world.", // PF
+        "Immersive and personal, focused on the character's struggles, journeys, and the weight of their promises.", // IS
+        "Intense and energetic, with high stakes, cool moments, and a rebellious attitude.", // CPR
     ],
-    [
-        "How do you feel about you (as the GM) leading the story?",
-        "I'd like you to guide us through a mystery or case.", // Bladerunner (Simplified)
-        "I'd like you to take us on an adventure with challenges to overcome.", // Pathfinder (Simplified)
-        "I'm happy to see where the story goes based on our choices.", // Ironsworn (Simplified - more player-driven)
-        "I'm excited for you to set up cool missions and see what we do.", // CP:RED (Simplified)
+    [ // Q7: Problem-Solving Approach (Existing - Good as is)
+        "When faced with difficulties, what approach sounds most appealing?",
+        "Using intellect, empathy, and investigation to find nuanced or non-violent solutions.", // BR
+        "Employing teamwork, tactics, and special abilities to overcome challenges directly.", // PF
+        "Relying on resourcefulness, determination, and tough choices to endure and succeed.", // IS
+        "Utilizing street smarts, specialized skills (combat, tech, social), and decisive action.", // CPR
     ],
-    [
-        "When things get tough in a game, what do you prefer?",
-        "Trying to outsmart the problem or find a clever solution.", // Bladerunner (Simplified)
-        "Facing the challenge head-on with strength and skill.", // Pathfinder (Simplified)
-        "Focusing on surviving and making the best of a bad situation.", // Ironsworn (Simplified)
-        "Getting into action and fighting our way through it.", // CP:RED (Simplified)
+    [ // Q8: NPC Interaction Style (Revised Q8 - Sharpened focus)
+        "What kind of interactions with non-player characters (NPCs) are most important to you?",
+        "Deep, complex relationships and dialogues that reveal character and plot intricacies.", // BR
+        "Meeting memorable allies, patrons, and villains who provide quests and challenges.", // PF
+        "Encounters driven by the needs of survival, trust, and the harsh realities of the world.", // IS
+        "Building a network of contacts, fixers, rivals, and clients essential for getting things done.", // CPR
+    ],
+    [ // Q9: Character Creation Emphasis (Revised Q9 - Focus on *what* is customized)
+        "What aspect of creating a character excites you most?",
+        "Defining their personality, background, internal conflicts, and place in the world.", // BR
+        "Choosing from many classes, feats, spells, and gear to build a mechanically unique hero.", // PF
+        "Starting with a simple concept and discovering the character through their experiences and vows.", // IS
+        "Crafting a unique style, role (like Netrunner, Solo), and acquiring cool gear/cybernetics.", // CPR
+    ],
+    [ // Q10: Preferred Pace (Existing - Good as is)
+        "What kind of pace do you generally prefer in games or stories?",
+        "A more deliberate pace with time for investigation, reflection, and character interaction.", // BR
+        "A varied pace mixing exploration, strategic combat, social encounters, and downtime.", // PF
+        "A pace that flows organically with the journey and the challenges sworn upon.", // IS
+        "A generally fast-paced experience driven by missions, action, and dealing with consequences.", // CPR
+    ],
+    [ // Q11: Tech vs Magic (New - Direct comparison)
+        "Which element sounds more exciting to incorporate into your character and the world?",
+        "Grounded, near-future tech like advanced forensics, replicants, spinners (flying cars).", // BR
+        "High fantasy magic: spellcasting, enchanted items, divine powers, mythical beasts.", // PF
+        "A gritty world with little or no magic, or perhaps only subtle, mysterious rituals.", // IS
+        "Transhuman tech: cybernetic limbs, neural interfaces, high-tech weapons, netrunning.", // CPR
+    ],
+    [ // Q12: Duet Focus (New - Tailored for 1-on-1)
+        "In a game with just you and the GM, what dynamic sounds best?",
+        "A focused narrative on my character's cases, moral dilemmas, and personal stakes.", // BR
+        "My character as the primary hero, perhaps with key NPC allies joining the adventures.", // PF (adapting party)
+        "A deeply personal story centered on my character's solitary journey and sworn quests.", // IS (strong duet fit)
+        "My character navigating dangerous gigs and relationships within a vibrant, often hostile, city.", // CPR
     ],
 ];
     for question in choices {
@@ -94,7 +125,7 @@ fn main() {
             4 => cyberpunk += 1,
             _ => unreachable!(),
         }
-        println!("You chose option {}!", choice);
+        println!("You chose option {}!\n", choice);
     }
 
     let (max_rpg, max_score) =
