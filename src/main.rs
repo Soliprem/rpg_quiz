@@ -1,21 +1,22 @@
 use std::{io, u8};
 
-fn get_user_choice(question: [&str; 4]) -> u8 {
+fn get_user_choice(question: [&str; 5]) -> u8 {
     let q = question[0];
     let opt1 = question[1];
     let opt2 = question[2];
     let opt3 = question[3];
+    let opt4 = question[4];
     loop {
         let mut input = String::new();
-        println!("{}\n1. {}\n2. {}\n3. {}", q, &opt1, &opt2, &opt3);
+        println!("{}\n1. {}\n2. {}\n3. {}\n4. {}", q, &opt1, &opt2, &opt3, &opt4);
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
         let trimmed = input.trim();
 
         match trimmed.parse::<u8>() {
-            Ok(num) if (1..=3).contains(&num) => return num,
-            _ => println!("Invalid choice. Please enter 1, 2, or 3"),
+            Ok(num) if (1..=4).contains(&num) => return num,
+            _ => println!("Invalid choice. Please enter 1, 2, 3, or 4"),
         }
     }
 }
@@ -25,86 +26,87 @@ fn main() {
     let mut bladerunner: u8 = 0;
     let mut pathfinder: u8 = 0;
     let mut ironsworn: u8 = 0;
-    let choices: [_; 10] = [
-        [
-            "What genre do you prefer?",
-            "Noir (Moral dilemmas, mystery, and crime.)", // Blade Runner
-            "Heroic (Grand adventures, good vs evil.)",   // Pathfinder
-            "Personal Narrative (Character-driven storytelling.)", // Ironsworn
-        ],
-        [
-            "Which setting do you prefer?",
-            "Dark Sci-Fi (Cyberpunk, corporations, AI, neon-lit cities.)", // Blade Runner
-            "High Fantasy (Magic, kingdoms, elves, and dragons.)",         // Pathfinder
-            "Dark Fantasy (Gritty, struggle, survival, fate-driven.)",     // Ironsworn
-        ],
-        [
-            "How do you feel about dice mechanics?",
-            "Simple rolls, no surprises—just roleplay.", // Blade Runner (D6-based)
-            "I enjoy rolling lots of dice and crunchy mechanics.", // Pathfinder (D20)
-            "I like rolling with consequences and uncertain outcomes.", // Ironsworn (D10 + moves)
-        ],
-        [
-            "What kind of character arcs interest you the most?",
-            "Struggles with morality, identity, and power in a dystopian world.", // Blade Runner
-            "Epic heroes who grow stronger and change the world.",                // Pathfinder
-            "Personal journeys shaped by choices, fate, and hardship.",           // Ironsworn
-        ],
-        [
-            "How structured do you want the game to be?",
-            "Tightly focused on solving cases with a clear framework.", // Blade Runner
-            "A sandbox world full of dungeons, quests, and combat.",    // Pathfinder
-            "A loose framework where story and improvisation guide play.", // Ironsworn
-        ],
-        [
-            "How important is combat to you?",
-            "Combat should be quick and minimal, with focus on investigation.", // Blade Runner
-            "I love tactical combat, building strong characters, and planning battles.", // Pathfinder
-            "Combat is part of the story, but survival and stakes are more important than balance.", // Ironsworn
-        ],
-        [
-            "How do you feel about rule complexity?",
-            "I prefer a streamlined system that lets me focus on story and mystery.", // Blade Runner
-            "I love deep mechanics, character builds, and optimizing my character.",  // Pathfinder
-            "I prefer flexible rules that let the story take the lead.",              // Ironsworn
-        ],
-        [
-            "How do you feel about a GM (Game Master) guiding the story?",
-            "A GM-driven mystery with clear objectives sounds great!", // Blade Runner
-            "I like a traditional GM-led adventure with lots of prep and structure.", // Pathfinder
-            "I'm fine with either a GM or co-op storytelling where players drive the world.", // Ironsworn
-        ],
-        [
-            "What kind of challenges do you enjoy most?",
-            "Solving mysteries, navigating moral dilemmas, and making tough choices.", // Blade Runner
-            "Overcoming enemies, puzzles, and exploring new locations.",               // Pathfinder
-            "Surviving, building my character’s legend, and improvising my fate.",     // Ironsworn
-        ],
-        [
-            "How do you feel about character failure?",
-            "Failure should be part of the mystery—bad choices have consequences.", // Blade Runner
-            "Failure should be fair, but I want opportunities to recover and keep going.", // Pathfinder
-            "Failure drives the story forward and shapes my character’s journey.", // Ironsworn
-        ],
-    ];
+    let mut cyberpunk: u8 = 0;
+    let choices: [[&str; 5]; 8] = [
+    [
+        "What kind of world do you find most interesting for an adventure?",
+        "A dark, futuristic city with cool technology and tough choices.", // Bladerunner (Simplified)
+        "A magical land with heroes, monsters, and grand quests.", // Pathfinder (Simplified)
+        "A wild and lonely place where you have to rely on yourself and your promises.", // Ironsworn (Simplified)
+        "A dangerous, exciting city in the near future with cybernetic enhancements and powerful corporations.", // CP:RED (Simplified)
+    ],
+    [
+        "Which of these types of stories sounds most exciting to you?",
+        "Solving mysteries and making difficult decisions with big consequences.", // Bladerunner (Simplified)
+        "Being a hero, fighting evil, and discovering amazing things.", // Pathfinder (Simplified)
+        "Exploring a harsh world, making your own way, and keeping your word.", // Ironsworn (Simplified)
+        "Going on action-packed missions, looking cool, and standing up to the bad guys.", // CP:RED (Simplified)
+    ],
+    [
+        "When you play a game, what kind of things do you enjoy doing the most?",
+        "Figuring out clues and talking to people to solve problems.", // Bladerunner (Simplified)
+        "Battling monsters and using special abilities.", // Pathfinder (Simplified)
+        "Exploring new places and trying to survive in a challenging environment.", // Ironsworn (Simplified)
+        "Having exciting fights and making a name for yourself.", // CP:RED (Simplified)
+    ],
+    [
+        "How do you feel about rules in games?",
+        "I prefer games where the story is the main focus, and the rules are simple.", // Bladerunner & Ironsworn (Combined for simplicity)
+        "I like having lots of options for my character and clear rules for what I can do.", // Pathfinder & CP:RED (Combined for broader appeal)
+        "I trust you to guide us, and I'm happy to learn as we go.", // General option for a new player
+        "As long as the rules make sense, I'm okay with them.", // Another general option
+    ],
+    [
+        "What kind of character would you enjoy playing as?",
+        "Someone clever and good at solving problems.", // Bladerunner (Simplified)
+        "A brave hero with special skills or powers.", // Pathfinder (Simplified)
+        "Someone tough and resourceful who can handle anything.", // Ironsworn (Simplified)
+        "Someone cool and skilled who can get things done.", // CP:RED (Simplified)
+    ],
+    [
+        "What kind of feeling do you want our game sessions to have?",
+        "Intriguing and like we're uncovering a secret.", // Bladerunner (Simplified)
+        "Exciting and like we're on a big adventure.", // Pathfinder (Simplified)
+        "Atmospheric and like we're facing challenges in a serious world.", // Ironsworn (Simplified)
+        "Action-packed and like we're in the middle of a thrilling story.", // CP:RED (Simplified)
+    ],
+    [
+        "How do you feel about you (as the GM) leading the story?",
+        "I'd like you to guide us through a mystery or case.", // Bladerunner (Simplified)
+        "I'd like you to take us on an adventure with challenges to overcome.", // Pathfinder (Simplified)
+        "I'm happy to see where the story goes based on our choices.", // Ironsworn (Simplified - more player-driven)
+        "I'm excited for you to set up cool missions and see what we do.", // CP:RED (Simplified)
+    ],
+    [
+        "When things get tough in a game, what do you prefer?",
+        "Trying to outsmart the problem or find a clever solution.", // Bladerunner (Simplified)
+        "Facing the challenge head-on with strength and skill.", // Pathfinder (Simplified)
+        "Focusing on surviving and making the best of a bad situation.", // Ironsworn (Simplified)
+        "Getting into action and fighting our way through it.", // CP:RED (Simplified)
+    ],
+];
     for question in choices {
         let choice = get_user_choice(question);
         match choice {
             1 => bladerunner += 1,
             2 => pathfinder += 1,
             3 => ironsworn += 1,
+            4 => cyberpunk += 1,
             _ => unreachable!(),
         }
         println!("You chose option {}!", choice);
     }
 
-    let (max_rpg, max_score) = if bladerunner >= pathfinder && bladerunner >= ironsworn {
-        ("Blade Runner RPG", bladerunner)
-    } else if pathfinder >= ironsworn {
-        ("Pathfinder", pathfinder)
-    } else {
-        ("Ironsworn", ironsworn)
-    };
+    let (max_rpg, max_score) =
+        if bladerunner >= pathfinder && bladerunner >= ironsworn && bladerunner >= cyberpunk {
+            ("Blade Runner RPG", bladerunner)
+        } else if pathfinder >= ironsworn && pathfinder >= cyberpunk {
+            ("Pathfinder", pathfinder)
+        } else if cyberpunk >= ironsworn {
+            ("Cyberpunk RED", cyberpunk)
+        } else {
+            ("Ironsworn", ironsworn)
+        };
 
     println!(
         "Based on your choices, {} is the best fit with a score of {}!",
